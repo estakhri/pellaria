@@ -67,6 +67,61 @@
       border: 0 !important;
     }
 
+    /* A saddle-stitch progress marker follows the visitor through the page. */
+    .scroll-seam {
+      position: fixed;
+      z-index: 72;
+      top: 50%;
+      right: 17px;
+      width: 12px;
+      height: min(38vh, 320px);
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+    .scroll-seam::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 5px;
+      width: 2px;
+      content: "";
+      background: repeating-linear-gradient(to bottom, rgba(243,237,226,.36) 0 4px, transparent 4px 10px);
+      filter: drop-shadow(0 1px 1px rgba(32,28,23,.28));
+    }
+    .scroll-seam__thread {
+      position: absolute;
+      top: 0;
+      left: 5px;
+      width: 2px;
+      height: var(--page-progress-pct, 0%);
+      max-height: 100%;
+      overflow: hidden;
+      background: repeating-linear-gradient(to bottom, #d9ad73 0 4px, transparent 4px 10px);
+      filter: drop-shadow(0 1px 2px rgba(54,31,20,.5));
+    }
+    .scroll-seam__needle {
+      position: absolute;
+      top: var(--page-needle-pct, 0%);
+      left: 1px;
+      width: 10px;
+      height: 22px;
+      border: 1px solid rgba(226,191,149,.9);
+      border-radius: 50% 50% 45% 45%;
+      background: linear-gradient(90deg, #795e3b, #e5c28d 48%, #725531);
+      box-shadow: 0 3px 10px rgba(32,28,23,.2);
+      transform: rotate(12deg);
+    }
+    .scroll-seam__needle::after {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 2px;
+      height: 5px;
+      content: "";
+      border: 1px solid rgba(67,16,27,.55);
+      border-radius: 50%;
+    }
+
     /* A stitched leather curtain introduces the atelier, then parts like a folio. */
     .atelier-intro { display: none; }
     .js .atelier-intro {
@@ -394,6 +449,283 @@
       line-height: .96;
     }
     .manifesto h2 em { color: var(--wine); font-weight: 400; }
+
+    /* Scroll atelier: the leather is burnished and saddle-stitched by motion. */
+    .leather-journey {
+      --journey-progress: 0;
+      --leather-lift: 26px;
+      --leather-turn: -7deg;
+      --leather-scale: .9;
+      --patina-x: 18%;
+      --patina-opacity: .16;
+      --stitch-offset: 100;
+      --ambience-x: 18%;
+      --halo-scale: .86;
+      --leather-saturation: .83;
+      --leather-brightness: .88;
+      --shine-travel: -58%;
+      --stamp-opacity: .22;
+      --stamp-scale: .82;
+      --meter-width: 0%;
+      position: relative;
+      height: 320vh;
+      color: var(--paper);
+      background: #1b1612;
+    }
+    .leather-journey__stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      min-height: 690px;
+      display: grid;
+      grid-template-columns: minmax(260px, .78fr) minmax(420px, 1.22fr);
+      align-items: center;
+      gap: clamp(30px, 7vw, 120px);
+      padding: clamp(82px, 10vh, 120px) clamp(24px, 7vw, 110px) clamp(54px, 7vh, 80px);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .leather-journey__stage::before {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      content: "";
+      background:
+        radial-gradient(circle at var(--ambience-x) 40%, rgba(169,133,78,.14), transparent 34%),
+        linear-gradient(115deg, #211a15 0%, #120f0d 74%);
+    }
+    .leather-journey__stage::after {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+      opacity: .24;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.08) 0 .6px, transparent .8px),
+        radial-gradient(circle at 70% 65%, rgba(0,0,0,.35) 0 .7px, transparent .9px);
+      background-size: 7px 7px, 9px 9px;
+      mix-blend-mode: soft-light;
+    }
+    .leather-journey__heading {
+      position: relative;
+      z-index: 4;
+      align-self: center;
+    }
+    .leather-journey__heading .eyebrow { color: #d7b184; }
+    .leather-journey__heading h2 {
+      max-width: 600px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(58px, 7.2vw, 112px);
+      font-weight: 400;
+      letter-spacing: -.065em;
+      line-height: .83;
+    }
+    .leather-journey__heading h2 em {
+      display: block;
+      padding-left: .42em;
+      color: #d7b184;
+      font-weight: 400;
+    }
+    .leather-journey__chapters {
+      position: relative;
+      min-height: 148px;
+      margin-top: clamp(46px, 8vh, 86px);
+    }
+    .leather-chapter {
+      position: absolute;
+      inset: 0;
+      max-width: 390px;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .55s ease, transform .7s cubic-bezier(.22,1,.36,1);
+      visibility: hidden;
+    }
+    .leather-chapter.is-active { opacity: 1; transform: none; visibility: visible; }
+    .leather-chapter__number {
+      display: block;
+      margin-bottom: 13px;
+      color: #d7b184;
+      font-family: var(--serif);
+      font-size: 13px;
+      font-style: italic;
+      letter-spacing: .1em;
+    }
+    .leather-chapter h3 {
+      margin: 0 0 9px;
+      font-family: var(--serif);
+      font-size: clamp(25px, 2.6vw, 39px);
+      font-weight: 400;
+    }
+    .leather-chapter p {
+      margin: 0;
+      color: rgba(243,237,226,.61);
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.62;
+    }
+    .leather-journey__visual {
+      position: relative;
+      z-index: 2;
+      width: min(52vw, 720px);
+      aspect-ratio: 1.15;
+      justify-self: end;
+      perspective: 1200px;
+    }
+    .leather-journey__halo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 82%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(215,177,132,.16);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(var(--halo-scale));
+    }
+    .leather-journey__halo::before,
+    .leather-journey__halo::after {
+      position: absolute;
+      inset: 10%;
+      content: "";
+      border: 1px solid rgba(215,177,132,.09);
+      border-radius: inherit;
+    }
+    .leather-journey__halo::after { inset: 22%; }
+    .leather-piece {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 88%;
+      aspect-ratio: 1.42;
+      overflow: hidden;
+      color: #e1bd8c;
+      border: 1px solid rgba(235,199,154,.28);
+      border-radius: 22% 14% 20% 12% / 17% 22% 13% 20%;
+      background-color: #6b1c29;
+      background-image:
+        radial-gradient(ellipse at var(--patina-x) 26%, rgba(236,181,112,var(--patina-opacity)) 0%, transparent 34%),
+        radial-gradient(circle at 21% 30%, rgba(255,255,255,.045) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 73% 68%, rgba(0,0,0,.2) 0 1px, transparent 1.5px),
+        linear-gradient(128deg, rgba(255,255,255,.045), transparent 36%, rgba(0,0,0,.18));
+      background-size: 100% 100%, 6px 6px, 8px 8px, 100% 100%;
+      box-shadow: 0 50px 100px rgba(0,0,0,.42), inset 0 0 80px rgba(40,5,12,.34), inset 0 1px rgba(255,255,255,.1);
+      filter: saturate(var(--leather-saturation)) brightness(var(--leather-brightness));
+      transform: translate(-50%, calc(-50% + var(--leather-lift))) rotate(var(--leather-turn)) scale(var(--leather-scale));
+      transform-style: preserve-3d;
+      transition: border-radius .5s ease;
+      will-change: transform, filter;
+    }
+    .leather-piece::before {
+      position: absolute;
+      z-index: 1;
+      inset: -35%;
+      content: "";
+      pointer-events: none;
+      background: linear-gradient(105deg, transparent 32%, rgba(255,235,201,.16) 48%, transparent 62%);
+      transform: translateX(var(--shine-travel)) rotate(8deg);
+      mix-blend-mode: soft-light;
+    }
+    .leather-piece::after {
+      position: absolute;
+      inset: 4.5%;
+      content: "";
+      pointer-events: none;
+      border: 1px solid rgba(230,190,140,.22);
+      border-radius: 16% 10% 15% 9% / 13% 17% 10% 15%;
+      box-shadow: inset 0 0 0 1px rgba(40,5,12,.18);
+    }
+    .leather-piece__stamp {
+      position: absolute;
+      z-index: 3;
+      top: 50%;
+      left: 50%;
+      width: clamp(74px, 10vw, 118px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(226,191,149,.45);
+      border-radius: 50%;
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 58px);
+      font-style: italic;
+      opacity: var(--stamp-opacity);
+      text-shadow: 0 1px rgba(255,255,255,.15), 0 -1px rgba(38,4,11,.8);
+      transform: translate(-50%, -50%) scale(var(--stamp-scale));
+    }
+    .leather-piece__stitch {
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .leather-piece__stitch-guide {
+      fill: none;
+      stroke: rgba(45,7,14,.38);
+      stroke-width: 2;
+    }
+    .leather-piece__stitch-mask {
+      fill: none;
+      stroke: #fff;
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: var(--stitch-offset);
+    }
+    .leather-piece__stitches {
+      fill: none;
+      stroke: #e0b477;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 2 5;
+      filter: drop-shadow(0 2px 1px rgba(41,5,12,.65));
+    }
+    .leather-piece__needle { filter: drop-shadow(0 3px 3px rgba(36,4,10,.65)); }
+    .leather-piece__needle line { stroke: #efd09d; stroke-width: 3; stroke-linecap: round; }
+    .leather-piece__needle ellipse { fill: none; stroke: #593319; stroke-width: 1.5; }
+    .leather-piece__needle-thread { fill: none; stroke: #d8a96d; stroke-width: 2.2; stroke-linecap: round; }
+    #stitchTool { opacity: 0; transition: opacity .25s ease; }
+    .leather-journey__meter {
+      position: absolute;
+      right: clamp(24px, 3vw, 48px);
+      bottom: clamp(28px, 5vh, 56px);
+      left: clamp(24px, 7vw, 110px);
+      z-index: 5;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+      color: rgba(243,237,226,.52);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .leather-journey__meter-track {
+      height: 1px;
+      overflow: visible;
+      background: rgba(243,237,226,.18);
+    }
+    .leather-journey__meter-fill {
+      position: relative;
+      width: var(--meter-width);
+      height: 1px;
+      background: #d7b184;
+    }
+    .leather-journey__meter-fill::after {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      width: 7px;
+      height: 7px;
+      content: "";
+      border-radius: 50%;
+      background: #d7b184;
+      box-shadow: 0 0 16px rgba(215,177,132,.55);
+    }
 
     .category-ribbon {
       width: max-content;
@@ -806,6 +1138,8 @@
     @media (max-width: 1050px) {
       .site-header__nav { gap: 16px; }
       .site-header__nav a:nth-child(n+4) { display: none; }
+      .leather-journey__stage { grid-template-columns: minmax(250px, .88fr) minmax(390px, 1.12fr); gap: 24px; padding-inline: 5vw; }
+      .leather-journey__visual { width: min(57vw, 680px); }
       .product-grid { grid-template-columns: repeat(3, 1fr); }
       .edits { grid-template-columns: 1.2fr 1fr; }
       .edit-card:last-child { grid-column: 1 / -1; min-height: 420px; }
@@ -815,6 +1149,7 @@
     }
 
     @media (max-width: 760px) {
+      .scroll-seam { display: none; }
       .announcement { height: 28px; font-size: 8px; }
       .announcement .announcement-extra { display: none; }
       .site-header, .site-header.is-fixed { top: 28px; height: 68px; grid-template-columns: 1fr auto 1fr; padding: 0 18px; }
@@ -837,6 +1172,25 @@
       .manifesto { grid-template-columns: 1fr; gap: 38px; padding-block: 100px; }
       .manifesto__aside { order: 2; }
       .manifesto h2 { font-size: clamp(49px, 14vw, 75px); }
+      .leather-journey { height: 285vh; }
+      .leather-journey__stage {
+        display: block;
+        min-height: 690px;
+        padding: 82px 22px 58px;
+      }
+      .leather-journey__heading h2 { font-size: clamp(48px, 14.5vw, 72px); }
+      .leather-journey__chapters { min-height: 150px; margin-top: 30px; }
+      .leather-chapter { max-width: 62%; }
+      .leather-chapter h3 { font-size: 27px; }
+      .leather-chapter p { font-size: 13px; }
+      .leather-journey__visual {
+        position: absolute;
+        right: -23vw;
+        bottom: 54px;
+        width: min(93vw, 590px);
+        opacity: .8;
+      }
+      .leather-journey__meter { right: 22px; bottom: 24px; left: 22px; }
       .edits { display: block; }
       .edit-card, .edit-card:last-child { min-height: 520px; }
       .product-grid { grid-template-columns: 1fr 1fr; gap: 38px 10px; }
@@ -878,6 +1232,8 @@
     }
 
     @media (max-width: 460px) {
+      .leather-chapter { max-width: 68%; }
+      .leather-journey__visual { right: -31vw; bottom: 72px; width: 108vw; }
       .product-grid { grid-template-columns: 1fr; gap: 44px; }
       .product-media { aspect-ratio: 1 / 1.12; }
       .site-footer__top { grid-template-columns: 1fr; }
@@ -889,10 +1245,26 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .scroll-seam { display: none; }
       .js .reveal { opacity: 1; transform: none; }
       .js .atelier-intro { display: none; }
       .hero, .craft__image { background-position-y: center !important; }
       .product-media, .button { transform: none !important; }
+      .leather-journey { height: auto; }
+      .leather-journey__stage { position: relative; height: auto; min-height: 0; align-items: start; padding-block: 100px; }
+      .leather-journey__chapters { display: grid; gap: 24px; min-height: 0; }
+      .leather-chapter { position: relative; opacity: 1; transform: none; visibility: visible; }
+      .leather-journey__visual { align-self: center; }
+      .leather-piece { filter: none; transform: translate(-50%, -50%); }
+      .leather-piece__stitch-mask { stroke-dashoffset: 0; }
+      .leather-piece__needle { display: none; }
+      .leather-journey__meter { display: none; }
+    }
+
+    @media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+      .leather-journey__stage { display: grid; grid-template-columns: 1fr; padding: 90px 22px; }
+      .leather-journey__visual { position: relative; right: auto; bottom: auto; width: 100%; margin-top: 44px; opacity: 1; }
+      .leather-chapter { max-width: none; }
     }
   </style>
 </head>
@@ -902,6 +1274,10 @@
     <div class="atelier-intro__panel atelier-intro__panel--left"></div>
     <div class="atelier-intro__panel atelier-intro__panel--right"></div>
     <div class="atelier-intro__mark"><span><strong>P</strong><small>Roma</small></span></div>
+  </div>
+  <div class="scroll-seam" aria-hidden="true">
+    <span class="scroll-seam__thread"></span>
+    <span class="scroll-seam__needle"></span>
   </div>
   <div class="announcement">Complimentary delivery above €150 <span>·</span> <span class="announcement-extra">Made for a lifetime in Italy</span></div>
 
@@ -964,6 +1340,67 @@
         <p>Rome taught us that beauty is not pristine. It is proportion, material and time—a surface becoming more itself with every touch.</p>
       </div>
       <h2 class="reveal" id="manifesto-title">Not just made in Italy.<br><em>Made of Italy.</em></h2>
+    </section>
+
+    <section class="leather-journey" id="patina" aria-labelledby="leather-journey-title">
+      <div class="leather-journey__stage">
+        <div class="leather-journey__heading">
+          <p class="eyebrow">A scroll through the atelier</p>
+          <h2 id="leather-journey-title">From hide<em>to heirloom.</em></h2>
+          <div class="leather-journey__chapters">
+            <article class="leather-chapter is-active" data-leather-step="0">
+              <span class="leather-chapter__number">I · Selezione</span>
+              <h3>The living grain</h3>
+              <p>We choose hides for their natural character—the quiet marks and variations that make every finished piece singular.</p>
+            </article>
+            <article class="leather-chapter" data-leather-step="1">
+              <span class="leather-chapter__number">II · Il taglio</span>
+              <h3>Cut with intention</h3>
+              <p>The pattern turns with the hide, preserving its strength while finding the most graceful line through the grain.</p>
+            </article>
+            <article class="leather-chapter" data-leather-step="2">
+              <span class="leather-chapter__number">III · Punto sella</span>
+              <h3>One stitch at a time</h3>
+              <p>A waxed thread passes twice through every opening. The rhythm is slower, stronger and unmistakably made by hand.</p>
+            </article>
+            <article class="leather-chapter" data-leather-step="3">
+              <span class="leather-chapter__number">IV · La patina</span>
+              <h3>Finished by your life</h3>
+              <p>Light, touch and time deepen the colour. What leaves our atelier becomes truly yours only through use.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="leather-journey__visual" aria-hidden="true">
+          <div class="leather-journey__halo"></div>
+          <div class="leather-piece">
+            <span class="leather-piece__stamp">P</span>
+            <svg class="leather-piece__stitch" viewBox="0 0 720 500" preserveAspectRatio="none">
+              <defs>
+                <mask id="stitch-reveal">
+                  <path class="leather-piece__stitch-mask" pathLength="100" d="M91 96 C176 61 267 71 360 78 C469 65 578 72 628 108 C652 184 645 298 611 365 C493 395 211 397 106 361 C70 286 67 172 91 96 Z"></path>
+                </mask>
+              </defs>
+              <path class="leather-piece__stitch-guide" d="M91 96 C176 61 267 71 360 78 C469 65 578 72 628 108 C652 184 645 298 611 365 C493 395 211 397 106 361 C70 286 67 172 91 96 Z"></path>
+              <path class="leather-piece__stitches" mask="url(#stitch-reveal)" pathLength="100" d="M91 96 C176 61 267 71 360 78 C469 65 578 72 628 108 C652 184 645 298 611 365 C493 395 211 397 106 361 C70 286 67 172 91 96 Z"></path>
+              <g id="stitchTool">
+                <path class="leather-piece__needle-thread" d="M0 0 C-18 8 -28 21 -40 32"></path>
+                <g class="leather-piece__needle">
+                  <line x1="-24" y1="0" x2="21" y2="0"></line>
+                  <ellipse cx="16" cy="0" rx="4" ry="2.7"></ellipse>
+                </g>
+              </g>
+              <path id="stitchMotionPath" pathLength="100" d="M91 96 C176 61 267 71 360 78 C469 65 578 72 628 108 C652 184 645 298 611 365 C493 395 211 397 106 361 C70 286 67 172 91 96 Z" fill="none" stroke="none"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="leather-journey__meter" aria-hidden="true">
+          <span id="leatherStepNumber">01</span>
+          <span class="leather-journey__meter-track"><span class="leather-journey__meter-fill"></span></span>
+          <span>04 · Fatto a mano</span>
+        </div>
+      </div>
     </section>
 
     <div class="ribbon-clip" aria-hidden="true">
@@ -1384,15 +1821,70 @@
     const hero = document.querySelector('.hero');
     const heroEdition = document.querySelector('.hero__edition');
     const craftImage = document.querySelector('.craft__image');
+    const leatherJourney = document.querySelector('.leather-journey');
+    const leatherPiece = document.querySelector('.leather-piece');
+    const leatherChapters = [...document.querySelectorAll('[data-leather-step]')];
+    const leatherStepNumber = document.querySelector('#leatherStepNumber');
+    const stitchMotionPath = document.querySelector('#stitchMotionPath');
+    const stitchTool = document.querySelector('#stitchTool');
+    const stitchPathLength = stitchMotionPath.getTotalLength();
+    const clamp = (value, minimum = 0, maximum = 1) => Math.min(maximum, Math.max(minimum, value));
+    let activeLeatherStep = 0;
     let motionFrame = null;
+
+    function updateLeatherJourney() {
+      const rect = leatherJourney.getBoundingClientRect();
+      const travel = Math.max(1, leatherJourney.offsetHeight - window.innerHeight);
+      const progress = clamp(-rect.top / travel);
+      const structure = clamp((progress - .12) / .62);
+      const stitchProgress = clamp((progress - .31) / .48);
+
+      leatherJourney.style.setProperty('--journey-progress', progress.toFixed(4));
+      leatherJourney.style.setProperty('--leather-lift', `${26 - progress * 52}px`);
+      leatherJourney.style.setProperty('--leather-turn', `${-7 + progress * 10}deg`);
+      leatherJourney.style.setProperty('--leather-scale', (.9 + progress * .1).toFixed(3));
+      leatherJourney.style.setProperty('--patina-x', `${18 + progress * 64}%`);
+      leatherJourney.style.setProperty('--patina-opacity', (.16 + progress * .24).toFixed(3));
+      leatherJourney.style.setProperty('--ambience-x', `${18 + progress * 38}%`);
+      leatherJourney.style.setProperty('--halo-scale', (.86 + progress * .18).toFixed(3));
+      leatherJourney.style.setProperty('--leather-saturation', (.83 + progress * .32).toFixed(3));
+      leatherJourney.style.setProperty('--leather-brightness', (.88 + progress * .12).toFixed(3));
+      leatherJourney.style.setProperty('--shine-travel', `${-58 + progress * 116}%`);
+      leatherJourney.style.setProperty('--stamp-opacity', (.22 + progress * .62).toFixed(3));
+      leatherJourney.style.setProperty('--stamp-scale', (.82 + progress * .18).toFixed(3));
+      leatherJourney.style.setProperty('--stitch-offset', (100 - stitchProgress * 100).toFixed(2));
+      leatherJourney.style.setProperty('--meter-width', `${(progress * 100).toFixed(2)}%`);
+
+      leatherPiece.style.borderRadius = `${22 - structure * 9}% ${14 - structure * 5}% ${20 - structure * 8}% ${12 - structure * 4}% / ${17 - structure * 6}% ${22 - structure * 10}% ${13 - structure * 5}% ${20 - structure * 9}%`;
+
+      const pathPosition = stitchProgress * stitchPathLength;
+      const point = stitchMotionPath.getPointAtLength(pathPosition);
+      const nextPoint = stitchMotionPath.getPointAtLength(Math.min(stitchPathLength, pathPosition + 2));
+      const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * 180 / Math.PI;
+      stitchTool.setAttribute('transform', `translate(${point.x} ${point.y}) rotate(${angle})`);
+      stitchTool.style.opacity = stitchProgress > .015 && stitchProgress < .995 ? '1' : '0';
+
+      const nextStep = progress < .24 ? 0 : progress < .49 ? 1 : progress < .76 ? 2 : 3;
+      if (nextStep !== activeLeatherStep) {
+        activeLeatherStep = nextStep;
+        leatherChapters.forEach((chapter, index) => chapter.classList.toggle('is-active', index === nextStep));
+        leatherStepNumber.textContent = String(nextStep + 1).padStart(2, '0');
+      }
+    }
+
     function updateSceneMotion() {
       motionFrame = null;
       if (reducedMotion.matches) return;
       const scrollY = window.scrollY;
+      const scrollableHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const pageProgress = clamp(scrollY / scrollableHeight);
+      document.documentElement.style.setProperty('--page-progress-pct', `${(pageProgress * 100).toFixed(2)}%`);
+      document.documentElement.style.setProperty('--page-needle-pct', `${(pageProgress * 93).toFixed(2)}%`);
       if (scrollY < window.innerHeight * 1.35) {
         hero.style.setProperty('--hero-shift', `${Math.min(28, scrollY * 0.028)}px`);
         heroEdition.style.setProperty('--edition-turn', `${Math.min(13, scrollY * 0.014)}deg`);
       }
+      updateLeatherJourney();
       const craftRect = craftImage.getBoundingClientRect();
       if (craftRect.bottom > 0 && craftRect.top < window.innerHeight) {
         const distanceFromCentre = craftRect.top + craftRect.height / 2 - window.innerHeight / 2;
