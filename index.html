@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Pellaria Roma — an editorial one-page concept for Italian leather goods, handcrafted for modern life.">
+  <meta name="theme-color" content="#6f1d2e">
+  <link rel="icon" href="data:,">
+  <title>Pellaria Roma — The shape of Italian leather</title>
+  <script>document.documentElement.classList.add('js')</script>
+  <style>
+    :root {
+      --paper: #f3ede2;
+      --paper-2: #e7ddce;
+      --ink: #201c17;
+      --muted: #6e665b;
+      --wine: #6f1d2e;
+      --wine-deep: #43101b;
+      --cognac: #b86234;
+      --olive: #4d5940;
+      --brass: #a9854e;
+      --line: rgba(32, 28, 23, .18);
+      --white: #fffdf7;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --shadow: 0 28px 80px rgba(50, 28, 18, .14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body.locked { overflow: hidden; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { color: var(--white); background: var(--wine); }
+    :focus-visible { outline: 2px solid var(--cognac); outline-offset: 4px; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 200;
+      top: 12px;
+      left: 12px;
+      padding: 12px 16px;
+      color: var(--white);
+      background: var(--ink);
+      transform: translateY(-150%);
+    }
+    .skip-link:focus { transform: none; }
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .2em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 28px; height: 1px; content: ""; background: currentColor; }
+    .serif { font-family: var(--serif); font-style: italic; }
+    .button {
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 0 22px;
+      border: 1px solid var(--ink);
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      transition: color .25s ease, background .25s ease, transform .25s ease;
+    }
+    .button::after { content: "↗"; font-size: 15px; font-weight: 400; }
+    .button:hover { color: var(--paper); background: var(--ink); transform: translateY(-2px); }
+    .button--light { color: var(--white); border-color: rgba(255,255,255,.72); }
+    .button--light:hover { color: var(--wine); background: var(--white); }
+    .button--wine { color: var(--white); border-color: var(--wine); background: var(--wine); }
+    .button--wine:hover { color: var(--white); background: var(--wine-deep); }
+
+    .announcement {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 0 20px;
+      color: var(--paper);
+      background: var(--wine);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .announcement span { opacity: .55; }
+
+    .site-header {
+      position: absolute;
+      z-index: 40;
+      top: 32px;
+      left: 0;
+      width: 100%;
+      height: 86px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 clamp(20px, 4vw, 68px);
+      border-bottom: 1px solid rgba(32, 28, 23, .18);
+      transition: height .3s ease, background .3s ease, box-shadow .3s ease;
+    }
+    .site-header.is-fixed {
+      position: fixed;
+      top: 0;
+      height: 70px;
+      background: rgba(243, 237, 226, .92);
+      box-shadow: 0 8px 36px rgba(32, 28, 23, .08);
+      backdrop-filter: blur(16px);
+    }
+    .site-header__nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); }
+    .site-header__nav a,
+    .header-action {
+      position: relative;
+      padding: 8px 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .site-header__nav a::after {
+      position: absolute;
+      bottom: 3px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      content: "";
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .25s ease;
+    }
+    .site-header__nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+    .site-header__actions { display: flex; justify-content: flex-end; align-items: center; gap: 20px; }
+    .wordmark { text-align: center; line-height: .8; }
+    .wordmark strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 30px;
+      font-weight: 500;
+      letter-spacing: .16em;
+    }
+    .wordmark small {
+      display: block;
+      margin-top: 10px;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .5em;
+      text-transform: uppercase;
+    }
+    .cart-count {
+      min-width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
+      color: var(--paper);
+      background: var(--wine);
+      border-radius: 50%;
+      font-size: 9px;
+      letter-spacing: 0;
+    }
+    .menu-toggle { display: none; }
+
+    .hero {
+      min-height: calc(100svh - 32px);
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      align-items: flex-end;
+      padding: 160px clamp(20px, 7vw, 110px) clamp(52px, 8vh, 90px);
+      background: #b49166 url("assets/atelier-hero.jpg") 57% center / cover no-repeat;
+    }
+    .hero::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      content: "";
+      background: linear-gradient(90deg, rgba(243,237,226,.94) 0%, rgba(243,237,226,.7) 31%, rgba(243,237,226,.08) 60%, transparent 100%);
+    }
+    .hero__content { width: min(610px, 50vw); }
+    .hero h1 {
+      max-width: 680px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(66px, 8.2vw, 126px);
+      font-weight: 400;
+      letter-spacing: -.065em;
+      line-height: .79;
+    }
+    .hero h1 em { display: block; padding-left: .55em; color: var(--wine); font-weight: 400; }
+    .hero__copy {
+      width: min(410px, 100%);
+      margin: 34px 0 32px;
+      color: #4f473e;
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .hero__meta {
+      position: absolute;
+      right: clamp(18px, 2.6vw, 46px);
+      bottom: 50px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      writing-mode: vertical-rl;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+    .hero__meta::before { width: 1px; height: 52px; content: ""; background: currentColor; }
+    .hero__edition {
+      position: absolute;
+      top: 150px;
+      right: clamp(24px, 5vw, 84px);
+      width: 72px;
+      height: 72px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(32,28,23,.55);
+      border-radius: 50%;
+      font-family: var(--serif);
+      font-size: 27px;
+      font-style: italic;
+    }
+
+    .assurance {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .assurance__item {
+      min-height: 105px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px clamp(18px, 2.6vw, 42px);
+      border-right: 1px solid rgba(243,237,226,.16);
+    }
+    .assurance__item:last-child { border-right: 0; }
+    .assurance__item strong { display: block; margin-bottom: 5px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .assurance__item small { color: rgba(243,237,226,.58); font-family: var(--serif); font-size: 13px; }
+    .assurance__number { color: var(--brass); font-family: var(--serif); font-size: 29px; font-style: italic; }
+
+    .manifesto {
+      position: relative;
+      display: grid;
+      grid-template-columns: .7fr 1.3fr;
+      gap: 7vw;
+      padding: clamp(100px, 14vw, 200px) clamp(22px, 7vw, 110px);
+      overflow: hidden;
+    }
+    .manifesto::after {
+      position: absolute;
+      right: -1vw;
+      bottom: -7vw;
+      color: rgba(111,29,46,.055);
+      content: "P";
+      font-family: var(--serif);
+      font-size: 42vw;
+      line-height: .7;
+      pointer-events: none;
+    }
+    .manifesto__aside { padding-top: 10px; }
+    .manifesto__aside p { max-width: 270px; color: var(--muted); font-family: var(--serif); font-size: 15px; line-height: 1.65; }
+    .manifesto h2 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(48px, 6vw, 91px);
+      font-weight: 400;
+      letter-spacing: -.055em;
+      line-height: .96;
+    }
+    .manifesto h2 em { color: var(--wine); font-weight: 400; }
+
+    .category-ribbon {
+      width: max-content;
+      display: flex;
+      align-items: center;
+      padding: 22px 0;
+      border-block: 1px solid var(--line);
+      animation: ribbon 36s linear infinite;
+    }
+    .ribbon-clip { overflow: hidden; }
+    .category-ribbon span {
+      display: inline-flex;
+      align-items: center;
+      gap: 32px;
+      padding-right: 32px;
+      white-space: nowrap;
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 42px);
+      font-style: italic;
+    }
+    .category-ribbon span::after { color: var(--wine); content: "◇"; font-family: var(--sans); font-size: 15px; }
+    @keyframes ribbon { to { transform: translateX(-50%); } }
+
+    .edits {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      min-height: 680px;
+      border-bottom: 1px solid var(--line);
+    }
+    .edit-card {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 560px;
+      padding: clamp(26px, 3vw, 48px);
+      overflow: hidden;
+      border-right: 1px solid rgba(243,237,226,.28);
+      color: var(--white);
+      background-position: center;
+      background-size: cover;
+    }
+    .edit-card::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      content: "";
+      background: linear-gradient(0deg, rgba(20,13,10,.76), transparent 65%);
+      transition: background .35s ease;
+    }
+    .edit-card::after {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      content: "";
+      background: inherit;
+      transition: transform .8s cubic-bezier(.22,1,.36,1);
+    }
+    .edit-card:hover::after { transform: scale(1.035); }
+    .edit-card--women { background-image: url("assets/catalogo-uno.jpg"); background-position: 0 0; background-size: 205% auto; }
+    .edit-card--men { background-image: url("assets/catalogo-due.jpg"); background-position: 0 100%; background-size: 205% auto; }
+    .edit-card--travel { background-image: url("assets/catalogo-due.jpg"); background-position: 100% 100%; background-size: 205% auto; }
+    .edit-card__index { position: absolute; top: 30px; right: 30px; font-family: var(--serif); font-size: 18px; font-style: italic; }
+    .edit-card h3 { margin: 0 0 10px; font-family: var(--serif); font-size: clamp(36px, 4vw, 64px); font-weight: 400; letter-spacing: -.04em; }
+    .edit-card p { max-width: 360px; margin: 0 0 26px; color: rgba(255,255,255,.7); font-family: var(--serif); font-size: 15px; line-height: 1.5; }
+    .edit-card__link { display: inline-flex; align-items: center; gap: 12px; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .edit-card__link::after { content: "→"; font-size: 16px; transition: transform .25s ease; }
+    .edit-card:hover .edit-card__link::after { transform: translateX(5px); }
+
+    .catalogue { padding: clamp(90px, 12vw, 170px) clamp(20px, 4vw, 68px); }
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 30px;
+      margin-bottom: 54px;
+    }
+    .section-head h2 { margin: 0; font-family: var(--serif); font-size: clamp(50px, 6.5vw, 96px); font-weight: 400; letter-spacing: -.06em; line-height: .85; }
+    .section-head h2 em { display: block; padding-left: 1em; color: var(--wine); font-weight: 400; }
+    .product-count { color: var(--muted); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 34px;
+    }
+    .filter {
+      min-height: 38px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: color .2s ease, background .2s ease;
+    }
+    .filter:hover, .filter.is-active { color: var(--paper); background: var(--ink); }
+
+    .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 16px; }
+    .product-card { min-width: 0; animation: cardIn .5s ease both; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(16px); } }
+    .product-media {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background-color: var(--paper-2);
+      background-image: var(--product-image);
+      background-repeat: no-repeat;
+      background-size: auto 205%;
+      cursor: pointer;
+    }
+    .crop-tl { background-position: left top; }
+    .crop-tr { background-position: right top; }
+    .crop-bl { background-position: left bottom; }
+    .crop-br { background-position: right bottom; }
+    .product-media::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      border: 1px solid transparent;
+      transition: border-color .25s ease;
+    }
+    .product-card:hover .product-media::after { border-color: rgba(32,28,23,.45); }
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 7px 9px;
+      color: var(--paper);
+      background: var(--wine);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .heart {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,253,247,.82);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 20px;
+      transition: color .2s ease, transform .2s ease;
+    }
+    .heart:hover { transform: scale(1.06); }
+    .heart[aria-pressed="true"] { color: var(--wine); }
+    .quick-add {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+      min-height: 43px;
+      border: 0;
+      color: var(--paper);
+      background: var(--ink);
+      cursor: pointer;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transform: translateY(calc(100% + 14px));
+      transition: transform .3s cubic-bezier(.22,1,.36,1), background .2s ease;
+    }
+    .product-card:hover .quick-add, .quick-add:focus { transform: translateY(0); }
+    .quick-add:hover { background: var(--wine); }
+    .product-info { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; padding-top: 16px; }
+    .product-kicker { grid-column: 1 / -1; color: var(--muted); font-size: 8px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .product-name { margin: 0; font-family: var(--serif); font-size: 20px; font-weight: 400; line-height: 1.2; }
+    .product-price { font-size: 12px; white-space: nowrap; }
+    .product-colour { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; color: var(--muted); font-family: var(--serif); font-size: 12px; }
+    .swatch { width: 10px; height: 10px; display: inline-block; border: 1px solid rgba(32,28,23,.25); border-radius: 50%; background: var(--swatch, var(--wine)); }
+    .catalogue__more { display: flex; justify-content: center; margin-top: 70px; }
+
+    .craft {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 880px;
+      color: var(--paper);
+      background: var(--wine-deep);
+    }
+    .craft__image {
+      position: relative;
+      min-height: 720px;
+      background: #aa886d url("assets/mani-artigiane.jpg") center / cover no-repeat;
+    }
+    .craft__image::after {
+      position: absolute;
+      inset: 24px;
+      content: "";
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 50% 50% 0 0 / 22% 22% 0 0;
+      pointer-events: none;
+    }
+    .craft__content { display: flex; flex-direction: column; justify-content: center; padding: clamp(60px, 9vw, 140px); }
+    .craft h2 { margin: 0 0 30px; font-family: var(--serif); font-size: clamp(52px, 6.2vw, 96px); font-weight: 400; letter-spacing: -.055em; line-height: .88; }
+    .craft h2 em { color: #d7b184; font-weight: 400; }
+    .craft__intro { max-width: 520px; margin: 0 0 42px; color: rgba(243,237,226,.68); font-family: var(--serif); font-size: 17px; line-height: 1.65; }
+    .craft-step { border-top: 1px solid rgba(243,237,226,.22); }
+    .craft-step:last-child { border-bottom: 1px solid rgba(243,237,226,.22); }
+    .craft-step button {
+      width: 100%;
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      border: 0;
+      color: inherit;
+      background: none;
+      cursor: pointer;
+      text-align: left;
+    }
+    .craft-step button span:first-child { color: #d7b184; font-family: var(--serif); font-style: italic; }
+    .craft-step button strong { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+    .craft-step button::after { content: "+"; font-size: 20px; font-weight: 300; }
+    .craft-step.is-open button::after { content: "−"; }
+    .craft-step p {
+      max-width: 500px;
+      max-height: 0;
+      margin: 0;
+      padding-left: 44px;
+      overflow: hidden;
+      color: rgba(243,237,226,.65);
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.6;
+      transition: max-height .3s ease, padding-bottom .3s ease;
+    }
+    .craft-step.is-open p { max-height: 120px; padding-bottom: 24px; }
+
+    .roman-note {
+      position: relative;
+      min-height: 720px;
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      align-items: center;
+      gap: 8vw;
+      padding: clamp(80px, 12vw, 170px) clamp(20px, 8vw, 130px);
+      overflow: hidden;
+      color: var(--paper);
+      background: var(--olive);
+    }
+    .roman-note::after {
+      position: absolute;
+      right: -8vw;
+      bottom: -10vw;
+      width: 48vw;
+      height: 48vw;
+      content: "";
+      border: 1px solid rgba(243,237,226,.16);
+      border-radius: 50% 50% 0 0;
+    }
+    .roman-note h2 { max-width: 800px; margin: 0; font-family: var(--serif); font-size: clamp(58px, 8vw, 124px); font-weight: 400; letter-spacing: -.065em; line-height: .83; }
+    .roman-note h2 em { display: block; padding-left: .6em; color: #e2bf95; font-weight: 400; }
+    .roman-note__aside { position: relative; z-index: 1; }
+    .roman-note__aside p { margin: 0 0 28px; color: rgba(243,237,226,.7); font-family: var(--serif); font-size: 17px; line-height: 1.65; }
+    .coordinates { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 35px 0; }
+    .coordinates span { padding-top: 12px; border-top: 1px solid rgba(243,237,226,.25); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
+
+    .newsletter {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 8vw;
+      padding: clamp(80px, 11vw, 150px) clamp(20px, 8vw, 130px);
+      border-bottom: 1px solid var(--line);
+    }
+    .newsletter h2 { margin: 0; font-family: var(--serif); font-size: clamp(46px, 5.2vw, 80px); font-weight: 400; letter-spacing: -.05em; line-height: .92; }
+    .newsletter h2 em { color: var(--wine); font-weight: 400; }
+    .newsletter p { color: var(--muted); font-family: var(--serif); font-size: 15px; line-height: 1.6; }
+    .newsletter-form { display: flex; margin-top: 28px; border-bottom: 1px solid var(--ink); }
+    .newsletter-form input { min-width: 0; flex: 1; padding: 16px 0; border: 0; background: transparent; outline: 0; font-family: var(--serif); font-size: 17px; }
+    .newsletter-form button { padding: 0 4px 0 20px; border: 0; background: transparent; cursor: pointer; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+
+    .site-footer { padding: 65px clamp(20px, 4vw, 68px) 28px; background: var(--paper); }
+    .site-footer__top { display: grid; grid-template-columns: 1.2fr repeat(3, 1fr); gap: 50px; margin-bottom: 80px; }
+    .footer-brand strong { display: block; margin-bottom: 18px; font-family: var(--serif); font-size: 44px; font-weight: 400; letter-spacing: .08em; }
+    .footer-brand p { max-width: 260px; color: var(--muted); font-family: var(--serif); font-size: 13px; line-height: 1.6; }
+    .footer-col h3 { margin: 0 0 20px; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
+    .footer-col a { display: block; width: fit-content; margin: 0 0 11px; color: var(--muted); font-family: var(--serif); font-size: 13px; }
+    .footer-col a:hover { color: var(--wine); }
+    .site-footer__bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 8px; letter-spacing: .12em; text-transform: uppercase; }
+
+    .drawer-backdrop {
+      position: fixed;
+      z-index: 79;
+      inset: 0;
+      visibility: hidden;
+      background: rgba(32,28,23,.42);
+      opacity: 0;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+    .drawer-backdrop.is-open { visibility: visible; opacity: 1; }
+    .drawer {
+      position: fixed;
+      z-index: 80;
+      top: 0;
+      right: 0;
+      width: min(460px, 100%);
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 28px;
+      background: var(--paper);
+      box-shadow: -20px 0 60px rgba(32,28,23,.15);
+      transform: translateX(102%);
+      transition: transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .drawer.is-open { transform: none; }
+    .drawer__head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .drawer__head h2 { margin: 0; font-family: var(--serif); font-size: 34px; font-weight: 400; }
+    .icon-button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: transparent; cursor: pointer; font-size: 20px; }
+    .drawer__items { flex: 1; overflow: auto; }
+    .drawer__empty { padding: 60px 20px; color: var(--muted); font-family: var(--serif); text-align: center; }
+    .cart-item { display: grid; grid-template-columns: 76px 1fr auto; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .cart-item__image { aspect-ratio: 1; background-image: var(--product-image); background-repeat: no-repeat; background-size: auto 205%; }
+    .cart-item h3 { margin: 5px 0 7px; font-family: var(--serif); font-size: 17px; font-weight: 400; }
+    .cart-item p { margin: 0; color: var(--muted); font-size: 10px; }
+    .cart-item button { align-self: start; border: 0; background: none; cursor: pointer; color: var(--muted); font-size: 18px; }
+    .drawer__foot { padding-top: 20px; border-top: 1px solid var(--line); }
+    .drawer__total { display: flex; justify-content: space-between; margin-bottom: 18px; font-family: var(--serif); font-size: 22px; }
+    .drawer__foot .button { width: 100%; }
+
+    dialog {
+      width: min(940px, calc(100% - 28px));
+      max-height: calc(100dvh - 28px);
+      padding: 0;
+      border: 0;
+      color: var(--ink);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop { background: rgba(32,28,23,.58); backdrop-filter: blur(4px); }
+    .quick-view { display: grid; grid-template-columns: 1.1fr .9fr; min-height: 600px; }
+    .quick-view__image { min-height: 550px; background-image: var(--product-image); background-repeat: no-repeat; background-size: auto 205%; }
+    .quick-view__content { position: relative; display: flex; flex-direction: column; justify-content: center; padding: clamp(38px, 6vw, 76px); }
+    .dialog-close { position: absolute; top: 20px; right: 20px; }
+    .quick-view h2 { margin: 0 0 10px; font-family: var(--serif); font-size: clamp(38px, 4vw, 58px); font-weight: 400; letter-spacing: -.04em; }
+    .quick-view__price { margin: 0 0 28px; font-size: 14px; }
+    .quick-view__description { color: var(--muted); font-family: var(--serif); font-size: 15px; line-height: 1.65; }
+    .quick-view__details { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 30px 0; padding: 22px 0; border-block: 1px solid var(--line); }
+    .quick-view__details span { font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .quick-view__details strong { display: block; margin-top: 5px; font-family: var(--serif); font-size: 13px; font-weight: 400; text-transform: none; }
+
+    .search-dialog { width: min(760px, calc(100% - 28px)); overflow: visible; }
+    .search-box { position: relative; padding: 70px clamp(26px, 7vw, 76px); }
+    .search-box h2 { margin: 0 0 24px; font-family: var(--serif); font-size: 48px; font-weight: 400; }
+    .search-box input { width: 100%; padding: 16px 0; border: 0; border-bottom: 1px solid var(--ink); background: transparent; outline: 0; font-family: var(--serif); font-size: 24px; }
+    .search-results { min-height: 36px; margin-top: 18px; color: var(--muted); font-family: var(--serif); font-size: 14px; line-height: 1.8; }
+    .search-results button { margin-right: 12px; padding: 0; border: 0; border-bottom: 1px solid currentColor; color: var(--wine); background: none; cursor: pointer; font-family: var(--serif); }
+
+    .mobile-menu { display: none; }
+    .toast {
+      position: fixed;
+      z-index: 100;
+      right: 24px;
+      bottom: 24px;
+      max-width: min(360px, calc(100% - 48px));
+      padding: 15px 20px;
+      color: var(--paper);
+      background: var(--ink);
+      box-shadow: var(--shadow);
+      font-size: 11px;
+      letter-spacing: .08em;
+      transform: translateY(30px);
+      visibility: hidden;
+      opacity: 0;
+      transition: .25s ease;
+    }
+    .toast.is-visible { visibility: visible; opacity: 1; transform: none; }
+
+    .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1); }
+    .js .reveal.is-visible { opacity: 1; transform: none; }
+
+    @media (max-width: 1050px) {
+      .site-header__nav { gap: 16px; }
+      .site-header__nav a:nth-child(n+4) { display: none; }
+      .product-grid { grid-template-columns: repeat(3, 1fr); }
+      .edits { grid-template-columns: 1.2fr 1fr; }
+      .edit-card:last-child { grid-column: 1 / -1; min-height: 420px; }
+      .craft__content { padding-inline: 7vw; }
+      .site-footer__top { grid-template-columns: 1.2fr repeat(2, 1fr); }
+      .footer-col:last-child { grid-column: 2; }
+    }
+
+    @media (max-width: 760px) {
+      .announcement { height: 28px; font-size: 8px; }
+      .announcement .announcement-extra { display: none; }
+      .site-header, .site-header.is-fixed { top: 28px; height: 68px; grid-template-columns: 1fr auto 1fr; padding: 0 18px; }
+      .site-header.is-fixed { top: 0; }
+      .site-header__nav { display: none; }
+      .menu-toggle { display: block; justify-self: start; }
+      .header-action--search { display: none; }
+      .site-header__actions { gap: 0; }
+      .wordmark strong { font-size: 22px; }
+      .wordmark small { margin-top: 8px; font-size: 6px; }
+      .hero { min-height: 860px; align-items: flex-start; padding: 176px 22px 50px; background-position: 67% center; }
+      .hero::before { background: linear-gradient(180deg, rgba(243,237,226,.95) 0%, rgba(243,237,226,.7) 42%, rgba(243,237,226,.03) 70%); }
+      .hero__content { width: 100%; }
+      .hero h1 { font-size: clamp(58px, 18vw, 88px); }
+      .hero__copy { width: 78%; margin-block: 24px; font-size: 16px; }
+      .hero__edition { top: auto; right: 22px; bottom: 28px; color: var(--paper); border-color: rgba(243,237,226,.65); }
+      .hero__meta { display: none; }
+      .assurance { grid-template-columns: 1fr 1fr; }
+      .assurance__item { min-height: 88px; border-bottom: 1px solid rgba(243,237,226,.16); }
+      .manifesto { grid-template-columns: 1fr; gap: 38px; padding-block: 100px; }
+      .manifesto__aside { order: 2; }
+      .manifesto h2 { font-size: clamp(49px, 14vw, 75px); }
+      .edits { display: block; }
+      .edit-card, .edit-card:last-child { min-height: 520px; }
+      .product-grid { grid-template-columns: 1fr 1fr; gap: 38px 10px; }
+      .product-name { font-size: 17px; }
+      .quick-add { transform: none; }
+      .section-head { grid-template-columns: 1fr; }
+      .craft { grid-template-columns: 1fr; }
+      .craft__image { min-height: 620px; }
+      .craft__content { padding: 80px 24px; }
+      .roman-note { grid-template-columns: 1fr; }
+      .newsletter { grid-template-columns: 1fr; }
+      .site-footer__top { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-col:last-child { grid-column: auto; }
+      .site-footer__bottom { flex-direction: column; }
+      .quick-view { grid-template-columns: 1fr; }
+      .quick-view__image { min-height: 430px; }
+      .quick-view__content { padding: 42px 26px; }
+      .mobile-menu {
+        position: fixed;
+        z-index: 90;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 26px 22px 38px;
+        visibility: hidden;
+        color: var(--paper);
+        background: var(--wine-deep);
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: .3s ease;
+      }
+      .mobile-menu.is-open { visibility: visible; opacity: 1; transform: none; }
+      .mobile-menu__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 60px; }
+      .mobile-menu__brand { font-family: var(--serif); font-size: 26px; letter-spacing: .12em; }
+      .mobile-menu nav { display: grid; gap: 20px; }
+      .mobile-menu nav a, .mobile-menu nav button { width: fit-content; padding: 0; border: 0; color: inherit; background: none; font-family: var(--serif); font-size: clamp(34px, 11vw, 54px); text-align: left; }
+      .mobile-menu__foot { margin-top: auto; color: rgba(243,237,226,.55); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
+    }
+
+    @media (max-width: 460px) {
+      .product-grid { grid-template-columns: 1fr; gap: 44px; }
+      .product-media { aspect-ratio: 1 / 1.12; }
+      .site-footer__top { grid-template-columns: 1fr; }
+      .footer-col:last-child { grid-column: auto; }
+      .assurance__item { padding-inline: 14px; }
+      .assurance__number { font-size: 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="announcement">Complimentary delivery above €150 <span>·</span> <span class="announcement-extra">Made for a lifetime in Italy</span></div>
+
+  <header class="site-header" id="siteHeader">
+    <button class="header-action menu-toggle" id="menuOpen" type="button" aria-label="Open menu">Menu</button>
+    <nav class="site-header__nav" aria-label="Main navigation">
+      <a href="#catalogo" data-filter-link="women">Women</a>
+      <a href="#catalogo" data-filter-link="men">Men</a>
+      <a href="#catalogo" data-filter-link="travel">Travel</a>
+      <a href="#artigianalita">The atelier</a>
+      <a href="#roma">Rome</a>
+    </nav>
+    <a class="wordmark" href="#top" aria-label="Pellaria Roma home">
+      <strong>PELLARIA</strong>
+      <small>Roma</small>
+    </a>
+    <div class="site-header__actions">
+      <button class="header-action header-action--search" id="searchOpen" type="button">Search</button>
+      <button class="header-action" id="cartOpen" type="button" aria-label="Open shopping bag">Bag <span class="cart-count" id="cartCount">0</span></button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" inert>
+    <div class="mobile-menu__head">
+      <span class="mobile-menu__brand">PELLARIA</span>
+      <button class="icon-button" id="menuClose" type="button" aria-label="Close menu">×</button>
+    </div>
+    <nav aria-label="Mobile navigation">
+      <a href="#catalogo" data-filter-link="women">Donna</a>
+      <a href="#catalogo" data-filter-link="men">Uomo</a>
+      <a href="#catalogo" data-filter-link="travel">Viaggio</a>
+      <a href="#artigianalita">Atelier</a>
+      <button id="mobileSearch" type="button">Cerca</button>
+    </nav>
+    <p class="mobile-menu__foot">Roma, Italia · 41.9028° N, 12.4964° E</p>
+  </div>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero__content reveal">
+        <p class="eyebrow">Edizione romana · 2026</p>
+        <h1 id="hero-title">Leather,<em>with an accent.</em></h1>
+        <p class="hero__copy">Sculpted by hand in Italy. Designed to gather a patina, a story, and a little of the city with every day.</p>
+        <a class="button" href="#catalogo">Explore the collection</a>
+      </div>
+      <div class="hero__edition" aria-hidden="true">I</div>
+      <div class="hero__meta" aria-hidden="true">Scroll to discover · Roma</div>
+    </section>
+
+    <section class="assurance" aria-label="Store benefits">
+      <div class="assurance__item"><span class="assurance__number">01</span><div><strong>Worldwide</strong><small>Fast, careful delivery</small></div></div>
+      <div class="assurance__item"><span class="assurance__number">02</span><div><strong>30 days</strong><small>Thoughtful returns</small></div></div>
+      <div class="assurance__item"><span class="assurance__number">03</span><div><strong>Secure</strong><small>Protected payments</small></div></div>
+      <div class="assurance__item"><span class="assurance__number">04</span><div><strong>Atelier care</strong><small>Personal assistance</small></div></div>
+    </section>
+
+    <section class="manifesto" aria-labelledby="manifesto-title">
+      <div class="manifesto__aside reveal">
+        <p class="eyebrow">Capitolo I · La forma</p>
+        <p>Rome taught us that beauty is not pristine. It is proportion, material and time—a surface becoming more itself with every touch.</p>
+      </div>
+      <h2 class="reveal" id="manifesto-title">Not just made in Italy.<br><em>Made of Italy.</em></h2>
+    </section>
+
+    <div class="ribbon-clip" aria-hidden="true">
+      <div class="category-ribbon">
+        <span>Handbags</span><span>Shoulder bags</span><span>Backpacks</span><span>Wallets</span><span>Formal bags</span><span>Briefcases</span><span>Shoes</span><span>Jackets</span><span>Business &amp; travel</span>
+        <span>Handbags</span><span>Shoulder bags</span><span>Backpacks</span><span>Wallets</span><span>Formal bags</span><span>Briefcases</span><span>Shoes</span><span>Jackets</span><span>Business &amp; travel</span>
+      </div>
+    </div>
+
+    <section class="edits" aria-label="Curated collections">
+      <a class="edit-card edit-card--women" href="#catalogo" data-filter-link="women">
+        <span class="edit-card__index">I</span>
+        <p class="eyebrow">La donna</p>
+        <h3>The soft<br>architecture</h3>
+        <p>Fluid handbags, formal silhouettes and enduring accessories.</p>
+        <span class="edit-card__link">View the women’s edit</span>
+      </a>
+      <a class="edit-card edit-card--men" href="#catalogo" data-filter-link="men">
+        <span class="edit-card__index">II</span>
+        <p class="eyebrow">L’uomo</p>
+        <h3>Quiet<br>utility</h3>
+        <p>Briefcases, shoes and jackets with a precise Roman line.</p>
+        <span class="edit-card__link">View the men’s edit</span>
+      </a>
+      <a class="edit-card edit-card--travel" href="#catalogo" data-filter-link="travel">
+        <span class="edit-card__index">III</span>
+        <p class="eyebrow">Il viaggio</p>
+        <h3>Made to<br>depart</h3>
+        <p>Travel pieces that become better companions with distance.</p>
+        <span class="edit-card__link">View travel</span>
+      </a>
+    </section>
+
+    <section class="catalogue" id="catalogo" aria-labelledby="catalogue-title">
+      <div class="section-head reveal">
+        <h2 id="catalogue-title">Catalogo<em>romano</em></h2>
+        <span class="product-count" id="productCount">14 pieces</span>
+      </div>
+      <div class="filters" role="group" aria-label="Filter the collection">
+        <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">Tutto</button>
+        <button class="filter" type="button" data-filter="women" aria-pressed="false">Donna</button>
+        <button class="filter" type="button" data-filter="men" aria-pressed="false">Uomo</button>
+        <button class="filter" type="button" data-filter="travel" aria-pressed="false">Business &amp; travel</button>
+        <button class="filter" type="button" data-filter="new" aria-pressed="false">New collection</button>
+        <button class="filter" type="button" data-filter="outlet" aria-pressed="false">Archivio / Outlet</button>
+      </div>
+      <div class="product-grid" id="productGrid" aria-live="polite"></div>
+      <noscript><p>Enable JavaScript to explore the interactive demo catalogue.</p></noscript>
+      <div class="catalogue__more"><button class="button" id="resetFilter" type="button">View the complete edit</button></div>
+    </section>
+
+    <section class="craft" id="artigianalita" aria-labelledby="craft-title">
+      <div class="craft__image" role="img" aria-label="Italian artisan hand stitching an oxblood leather panel"></div>
+      <div class="craft__content reveal">
+        <p class="eyebrow">Capitolo II · Il gesto</p>
+        <h2 id="craft-title">A hand leaves<br><em>its signature.</em></h2>
+        <p class="craft__intro">The smallest decisions are the ones you feel for years: the resistance of a clasp, the turn of an edge, the rhythm of a saddle stitch.</p>
+        <div class="craft-steps">
+          <div class="craft-step is-open">
+            <button type="button" aria-expanded="true"><span>I</span><strong>The hide</strong></button>
+            <p>Full-grain leathers are selected for character, not uniformity, so natural marks become part of the piece rather than something to hide.</p>
+          </div>
+          <div class="craft-step">
+            <button type="button" aria-expanded="false"><span>II</span><strong>The cut</strong></button>
+            <p>Each pattern is positioned to follow the strength and direction of the hide, balancing structure with a natural hand.</p>
+          </div>
+          <div class="craft-step">
+            <button type="button" aria-expanded="false"><span>III</span><strong>The finish</strong></button>
+            <p>Edges are refined in repeated passes, hardware is tested by hand, and every seam is inspected before the piece leaves the atelier.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="roman-note" id="roma" aria-labelledby="rome-title">
+      <div class="reveal">
+        <p class="eyebrow">From Rome, slowly</p>
+        <h2 id="rome-title">The city is<br><em>our last.</em></h2>
+      </div>
+      <div class="roman-note__aside reveal">
+        <p>Built for long afternoons, stone stairways, train platforms and dinners that begin later than planned. This is Italian leather for life as it is lived.</p>
+        <div class="coordinates" role="group" aria-label="Rome studio details">
+          <span>Roma, Italia</span><span>Studio visits</span>
+          <span>41.9028° N</span><span>By appointment</span>
+        </div>
+        <a class="button button--light" href="mailto:atelier@example.com">Plan a visit</a>
+      </div>
+    </section>
+
+    <section class="newsletter" aria-labelledby="newsletter-title">
+      <h2 class="reveal" id="newsletter-title">Letters from<br><em>the atelier.</em></h2>
+      <div class="reveal">
+        <p>New forms, material stories and quiet notes from Rome. Sent occasionally, never urgently.</p>
+        <form class="newsletter-form" id="newsletterForm">
+          <label for="newsletterEmail" class="visually-hidden">Email address</label>
+          <input id="newsletterEmail" type="email" name="email" autocomplete="email" placeholder="Your email address" required>
+          <button type="submit">Subscribe →</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__top">
+      <div class="footer-brand">
+        <strong>PELLARIA</strong>
+        <p>An independent design concept for the art and utility of Italian leather.</p>
+      </div>
+      <div class="footer-col"><h3>Collection</h3><a href="#catalogo" data-filter-link="women">Women</a><a href="#catalogo" data-filter-link="men">Men</a><a href="#catalogo" data-filter-link="travel">Business &amp; Travel</a><a href="#catalogo" data-filter-link="outlet">Outlet</a></div>
+      <div class="footer-col"><h3>Atelier</h3><a href="#artigianalita">Our craft</a><a href="#roma">Rome studio</a><a href="#newsletter-title">Journal</a><a href="mailto:care@example.com">Product care</a></div>
+      <div class="footer-col"><h3>Assistance</h3><a href="mailto:care@example.com">Contact</a><a href="#top">Shipping &amp; returns</a><a href="#top">Payments</a><a href="#top">Instagram</a></div>
+    </div>
+    <div class="site-footer__bottom"><span>© 2026 Pellaria concept demo</span><span>Made with intention · Roma</span></div>
+  </footer>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="cartDrawer" aria-labelledby="cartTitle" inert>
+    <div class="drawer__head"><h2 id="cartTitle">La borsa</h2><button class="icon-button" id="cartClose" type="button" aria-label="Close shopping bag">×</button></div>
+    <div class="drawer__items" id="cartItems"></div>
+    <div class="drawer__foot" id="cartFoot" hidden>
+      <div class="drawer__total"><span>Total</span><strong id="cartTotal">€0</strong></div>
+      <button class="button button--wine" type="button" id="checkoutButton">Proceed to checkout</button>
+    </div>
+  </aside>
+
+  <dialog id="quickDialog" aria-labelledby="quickTitle">
+    <div class="quick-view">
+      <div class="quick-view__image" id="quickImage" role="img"></div>
+      <div class="quick-view__content">
+        <button class="icon-button dialog-close" type="button" data-close-dialog aria-label="Close quick view">×</button>
+        <p class="eyebrow" id="quickKicker">Pellaria Roma</p>
+        <h2 id="quickTitle">Product</h2>
+        <p class="quick-view__price" id="quickPrice"></p>
+        <p class="quick-view__description" id="quickDescription"></p>
+        <div class="quick-view__details"><span>Material<strong id="quickMaterial"></strong></span><span>Colour<strong id="quickColour"></strong></span></div>
+        <button class="button button--wine" id="quickAdd" type="button">Add to bag</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="search-dialog" id="searchDialog" aria-labelledby="searchTitle">
+    <div class="search-box">
+      <button class="icon-button dialog-close" type="button" data-close-search aria-label="Close search">×</button>
+      <h2 id="searchTitle">What are you looking for?</h2>
+      <label class="visually-hidden" for="searchInput">Search the catalogue</label>
+      <input id="searchInput" type="search" placeholder="Try “briefcase” or “oxblood”">
+      <div class="search-results" id="searchResults">Handbags · Backpacks · Shoes · Travel</div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const products = [
+      { id: 'aurelia', audience: 'women', category: 'Handbags', name: 'Aurelia', price: 219, sheet: 'uno', crop: 'tl', material: 'Full-grain calfskin', colour: 'Oxblood', swatch: '#6f1d2e', status: 'new' },
+      { id: 'trastevere', audience: 'women', category: 'Shoulder bags', name: 'Trastevere', price: 149, sheet: 'due', crop: 'tr', material: 'Tumbled calfskin', colour: 'Terra', swatch: '#a94a2e', status: 'new' },
+      { id: 'ottavia', audience: 'women', category: 'Backpacks', name: 'Ottavia', price: 209, sheet: 'due', crop: 'tl', material: 'Vegetable-tanned leather', colour: 'Cognac', swatch: '#a95c2c', status: 'core' },
+      { id: 'minerva', audience: 'women', category: 'Wallets & accessories', name: 'Minerva', price: 89, sheet: 'due', crop: 'bl', material: 'Smooth calfskin', colour: 'Mosto', swatch: '#5e1724', status: 'outlet' },
+      { id: 'costanza', audience: 'women', category: 'Formal bags', name: 'Costanza', price: 259, sheet: 'uno', crop: 'tl', material: 'Polished calfskin', colour: 'Barolo', swatch: '#4c1720', status: 'core' },
+      { id: 'celia', audience: 'women', category: 'Shoes', name: 'Celia', price: 189, sheet: 'uno', crop: 'tr', material: 'Hand-burnished calfskin', colour: 'Ambra', swatch: '#b9622f', status: 'new' },
+      { id: 'sestina', audience: 'women', category: 'Jackets', name: 'Sestina', price: 280, sheet: 'uno', crop: 'br', material: 'Soft lambskin', colour: 'Oliva', swatch: '#48533a', status: 'outlet' },
+      { id: 'adriano', audience: 'men', category: 'Briefcases', name: 'Adriano', price: 275, sheet: 'uno', crop: 'bl', material: 'Full-grain cowhide', colour: 'Espresso', swatch: '#3e251c', status: 'core' },
+      { id: 'flaminio', audience: 'men', category: 'Backpacks', name: 'Flaminio', price: 299, sheet: 'due', crop: 'tl', material: 'Vegetable-tanned leather', colour: 'Cuoio', swatch: '#9c5126', status: 'core' },
+      { id: 'cassio', audience: 'men', category: 'Shoulder bags', name: 'Cassio', price: 174, sheet: 'due', crop: 'tr', material: 'Tumbled calfskin', colour: 'Mattone', swatch: '#994127', status: 'outlet' },
+      { id: 'marzio', audience: 'men', category: 'Wallets & accessories', name: 'Marzio', price: 74, sheet: 'due', crop: 'bl', material: 'Smooth calfskin', colour: 'Oxblood', swatch: '#6b1c27', status: 'new' },
+      { id: 'tiberio', audience: 'men', category: 'Shoes', name: 'Tiberio', price: 215, sheet: 'uno', crop: 'tr', material: 'Hand-burnished calfskin', colour: 'Cognac', swatch: '#aa5a2a', status: 'core' },
+      { id: 'livio', audience: 'men', category: 'Jackets', name: 'Livio', price: 320, sheet: 'uno', crop: 'br', material: 'Washed lambskin', colour: 'Bosco', swatch: '#3f4938', status: 'new' },
+      { id: 'via-appia', audience: 'travel', category: 'Business & travel', name: 'Via Appia 48H', price: 354, sheet: 'due', crop: 'br', material: 'Full-grain cowhide', colour: 'Tabacco', swatch: '#83502f', status: 'new' }
+    ];
+
+    const descriptions = {
+      'Handbags': 'A generous everyday form shaped around a clean, softly structured silhouette and finished by hand.',
+      'Shoulder bags': 'Compact, balanced and designed to sit naturally against the body from morning through evening.',
+      'Backpacks': 'Quietly practical proportions with a considered interior for the objects that travel with you.',
+      'Wallets & accessories': 'Small leather architecture, refined to reveal the character of the hide through daily touch.',
+      'Formal bags': 'A precise silhouette for evenings and occasions, with the restraint of modern Roman tailoring.',
+      'Shoes': 'Hand-burnished leather and an assured profile designed for long, unhurried steps.',
+      'Jackets': 'Supple lambskin cut close to the body, balancing structure with unmistakable ease.',
+      'Briefcases': 'A disciplined business case with a calm exterior and an intelligently divided interior.',
+      'Business & travel': 'A companion for the train, the weekend and every graceful departure in between.'
+    };
+
+    const state = { filter: 'all', cart: [], quickId: null };
+    const productGrid = document.querySelector('#productGrid');
+    const productCount = document.querySelector('#productCount');
+    const imageFor = product => `url(assets/catalogo-${product.sheet}.jpg)`;
+    const findProduct = id => products.find(product => product.id === id);
+    const formatPrice = value => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value);
+
+    function visibleProducts() {
+      if (state.filter === 'all') return products;
+      if (state.filter === 'new' || state.filter === 'outlet') return products.filter(product => product.status === state.filter);
+      return products.filter(product => product.audience === state.filter);
+    }
+
+    function renderProducts() {
+      const visible = visibleProducts();
+      productCount.textContent = `${visible.length} ${visible.length === 1 ? 'piece' : 'pieces'}`;
+      productGrid.innerHTML = visible.map((product, index) => `
+        <article class="product-card" style="animation-delay:${Math.min(index * 35, 240)}ms">
+          <div class="product-media crop-${product.crop}" data-quick="${product.id}" style="--product-image:${imageFor(product)}" role="img" aria-label="${product.name}, ${product.category.toLowerCase()} in ${product.colour}">
+            ${product.status === 'new' ? '<span class="product-badge">Nuovo</span>' : product.status === 'outlet' ? '<span class="product-badge">Archivio</span>' : ''}
+            <button class="heart" type="button" data-heart="${product.id}" aria-label="Save ${product.name}" aria-pressed="false">♡</button>
+            <button class="quick-add" type="button" data-add="${product.id}">Add to bag · ${formatPrice(product.price)}</button>
+          </div>
+          <div class="product-info">
+            <span class="product-kicker">${product.audience === 'women' ? 'Donna' : product.audience === 'men' ? 'Uomo' : 'Viaggio'} · ${product.category}</span>
+            <h3 class="product-name">${product.name}</h3>
+            <span class="product-price">${formatPrice(product.price)}</span>
+            <span class="product-colour"><i class="swatch" style="--swatch:${product.swatch}"></i>${product.colour}</span>
+          </div>
+        </article>`).join('');
+    }
+
+    function setFilter(filter) {
+      state.filter = filter;
+      document.querySelectorAll('[data-filter]').forEach(button => {
+        const active = button.dataset.filter === filter;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', active);
+      });
+      renderProducts();
+    }
+
+    document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => setFilter(button.dataset.filter)));
+    document.querySelectorAll('[data-filter-link]').forEach(link => link.addEventListener('click', () => setFilter(link.dataset.filterLink)));
+    document.querySelector('#resetFilter').addEventListener('click', () => setFilter('all'));
+
+    const quickDialog = document.querySelector('#quickDialog');
+    function openQuick(id) {
+      const product = findProduct(id);
+      if (!product) return;
+      state.quickId = id;
+      const image = document.querySelector('#quickImage');
+      image.className = `quick-view__image crop-${product.crop}`;
+      image.style.setProperty('--product-image', imageFor(product));
+      image.setAttribute('aria-label', `${product.name} in ${product.colour}`);
+      document.querySelector('#quickKicker').textContent = `${product.audience === 'women' ? 'Donna' : product.audience === 'men' ? 'Uomo' : 'Viaggio'} · ${product.category}`;
+      document.querySelector('#quickTitle').textContent = product.name;
+      document.querySelector('#quickPrice').textContent = formatPrice(product.price);
+      document.querySelector('#quickDescription').textContent = descriptions[product.category];
+      document.querySelector('#quickMaterial').textContent = product.material;
+      document.querySelector('#quickColour').textContent = product.colour;
+      quickDialog.showModal();
+    }
+
+    productGrid.addEventListener('click', event => {
+      const heart = event.target.closest('[data-heart]');
+      if (heart) {
+        const pressed = heart.getAttribute('aria-pressed') === 'true';
+        heart.setAttribute('aria-pressed', String(!pressed));
+        heart.textContent = pressed ? '♡' : '♥';
+        showToast(pressed ? 'Removed from your saved pieces' : 'Saved to your private edit');
+        return;
+      }
+      const add = event.target.closest('[data-add]');
+      if (add) { addToCart(add.dataset.add); return; }
+      const media = event.target.closest('[data-quick]');
+      if (media) openQuick(media.dataset.quick);
+    });
+
+    document.querySelector('[data-close-dialog]').addEventListener('click', () => quickDialog.close());
+    document.querySelector('#quickAdd').addEventListener('click', () => { addToCart(state.quickId); quickDialog.close(); });
+    quickDialog.addEventListener('click', event => { if (event.target === quickDialog) quickDialog.close(); });
+
+    const cartDrawer = document.querySelector('#cartDrawer');
+    const drawerBackdrop = document.querySelector('#drawerBackdrop');
+    function setCartOpen(open) {
+      cartDrawer.classList.toggle('is-open', open);
+      drawerBackdrop.classList.toggle('is-open', open);
+      cartDrawer.inert = !open;
+      document.body.classList.toggle('locked', open);
+      if (open) document.querySelector('#cartClose').focus();
+    }
+    document.querySelector('#cartOpen').addEventListener('click', () => setCartOpen(true));
+    document.querySelector('#cartClose').addEventListener('click', () => setCartOpen(false));
+    drawerBackdrop.addEventListener('click', () => setCartOpen(false));
+
+    function addToCart(id) {
+      const line = state.cart.find(item => item.id === id);
+      if (line) line.quantity += 1;
+      else state.cart.push({ id, quantity: 1 });
+      renderCart();
+      showToast(`${findProduct(id).name} added to your bag`);
+    }
+
+    function renderCart() {
+      const items = document.querySelector('#cartItems');
+      const totalQuantity = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.querySelector('#cartCount').textContent = totalQuantity;
+      document.querySelector('#cartFoot').hidden = !state.cart.length;
+      if (!state.cart.length) {
+        items.innerHTML = '<p class="drawer__empty">Your bag is waiting for something made to last.</p>';
+        return;
+      }
+      items.innerHTML = state.cart.map(line => {
+        const product = findProduct(line.id);
+        return `<article class="cart-item">
+          <div class="cart-item__image crop-${product.crop}" style="--product-image:${imageFor(product)}" aria-hidden="true"></div>
+          <div><h3>${product.name}</h3><p>${product.colour} · Qty ${line.quantity}</p><p>${formatPrice(product.price * line.quantity)}</p></div>
+          <button type="button" data-remove="${product.id}" aria-label="Remove ${product.name}">×</button>
+        </article>`;
+      }).join('');
+      const total = state.cart.reduce((sum, line) => sum + findProduct(line.id).price * line.quantity, 0);
+      document.querySelector('#cartTotal').textContent = formatPrice(total);
+    }
+
+    document.querySelector('#cartItems').addEventListener('click', event => {
+      const remove = event.target.closest('[data-remove]');
+      if (!remove) return;
+      state.cart = state.cart.filter(item => item.id !== remove.dataset.remove);
+      renderCart();
+    });
+    document.querySelector('#checkoutButton').addEventListener('click', () => showToast('Checkout is intentionally disabled in this front-end demo.'));
+
+    const mobileMenu = document.querySelector('#mobileMenu');
+    function setMenuOpen(open) {
+      mobileMenu.classList.toggle('is-open', open);
+      mobileMenu.inert = !open;
+      document.body.classList.toggle('locked', open);
+    }
+    document.querySelector('#menuOpen').addEventListener('click', () => setMenuOpen(true));
+    document.querySelector('#menuClose').addEventListener('click', () => setMenuOpen(false));
+    mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenuOpen(false)));
+
+    const searchDialog = document.querySelector('#searchDialog');
+    const searchInput = document.querySelector('#searchInput');
+    function openSearch() { setMenuOpen(false); searchDialog.showModal(); setTimeout(() => searchInput.focus(), 0); }
+    document.querySelector('#searchOpen').addEventListener('click', openSearch);
+    document.querySelector('#mobileSearch').addEventListener('click', openSearch);
+    document.querySelector('[data-close-search]').addEventListener('click', () => searchDialog.close());
+    searchDialog.addEventListener('click', event => { if (event.target === searchDialog) searchDialog.close(); });
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const matches = query ? products.filter(product => [product.name, product.category, product.colour, product.material].join(' ').toLowerCase().includes(query)).slice(0, 5) : [];
+      document.querySelector('#searchResults').innerHTML = query ? (matches.length ? matches.map(product => `<button type="button" data-search-product="${product.id}">${product.name} — ${product.category}</button>`).join('') : 'No pieces found. Try a material, colour or category.') : 'Handbags · Backpacks · Shoes · Travel';
+    });
+    document.querySelector('#searchResults').addEventListener('click', event => {
+      const result = event.target.closest('[data-search-product]');
+      if (!result) return;
+      searchDialog.close();
+      openQuick(result.dataset.searchProduct);
+    });
+
+    document.querySelectorAll('.craft-step button').forEach(button => button.addEventListener('click', () => {
+      const step = button.closest('.craft-step');
+      const open = !step.classList.contains('is-open');
+      document.querySelectorAll('.craft-step').forEach(item => { item.classList.remove('is-open'); item.querySelector('button').setAttribute('aria-expanded', 'false'); });
+      if (open) { step.classList.add('is-open'); button.setAttribute('aria-expanded', 'true'); }
+    }));
+
+    document.querySelector('#newsletterForm').addEventListener('submit', event => {
+      event.preventDefault();
+      event.currentTarget.reset();
+      showToast('Grazie. Your first letter from Rome will arrive soon.');
+    });
+
+    const toast = document.querySelector('#toast');
+    let toastTimer;
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2600);
+    }
+
+    const header = document.querySelector('#siteHeader');
+    window.addEventListener('scroll', () => header.classList.toggle('is-fixed', window.scrollY > 120), { passive: true });
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
+
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
