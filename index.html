@@ -786,9 +786,9 @@
       transition: transform .8s cubic-bezier(.22,1,.36,1);
     }
     .edit-card:hover::after { transform: scale(1.035); }
-    .edit-card--women { background-image: url("assets/catalogo-uno.jpg"); background-position: 0 0; background-size: 205% auto; }
-    .edit-card--men { background-image: url("assets/catalogo-due.jpg"); background-position: 0 100%; background-size: 205% auto; }
-    .edit-card--travel { background-image: url("assets/catalogo-due.jpg"); background-position: 100% 100%; background-size: 205% auto; }
+    .edit-card--women { background-image: url("assets/catalogo-uno-tl.jpg"); background-position: center; }
+    .edit-card--men { background-image: url("assets/catalogo-uno-bl.jpg"); background-position: center; }
+    .edit-card--travel { background-image: url("assets/catalogo-due-br.jpg"); background-position: center; }
     .edit-card__index { position: absolute; top: 30px; right: 30px; font-family: var(--serif); font-size: 18px; font-style: italic; }
     .edit-card h3 { margin: 0 0 10px; font-family: var(--serif); font-size: clamp(36px, 4vw, 64px); font-weight: 400; letter-spacing: -.04em; }
     .edit-card p { max-width: 360px; margin: 0 0 26px; color: rgba(255,255,255,.7); font-family: var(--serif); font-size: 15px; line-height: 1.5; }
@@ -834,22 +834,20 @@
     @keyframes cardIn { from { opacity: 0; transform: translateY(16px); } }
     .product-media {
       position: relative;
-      aspect-ratio: 4 / 5;
+      aspect-ratio: 1;
       overflow: hidden;
       background-color: var(--paper-2);
       background-image: var(--product-image);
       background-repeat: no-repeat;
-      background-size: auto 205%;
+      background-position: center;
+      background-size: cover;
       cursor: pointer;
       transform: perspective(950px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateZ(0);
       transform-style: preserve-3d;
       transition: transform .55s cubic-bezier(.22,1,.36,1), box-shadow .55s ease;
       will-change: transform;
     }
-    .crop-tl { background-position: left top; }
-    .crop-tr { background-position: right top; }
-    .crop-bl { background-position: left bottom; }
-    .crop-br { background-position: right bottom; }
+    .crop-tl, .crop-tr, .crop-bl, .crop-br { background-position: center; }
     .product-media::before {
       position: absolute;
       z-index: 1;
@@ -1076,7 +1074,7 @@
     .drawer__items { flex: 1; overflow: auto; }
     .drawer__empty { padding: 60px 20px; color: var(--muted); font-family: var(--serif); text-align: center; }
     .cart-item { display: grid; grid-template-columns: 76px 1fr auto; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
-    .cart-item__image { aspect-ratio: 1; background-image: var(--product-image); background-repeat: no-repeat; background-size: auto 205%; }
+    .cart-item__image { aspect-ratio: 1; background-image: var(--product-image); background-repeat: no-repeat; background-position: center; background-size: cover; }
     .cart-item h3 { margin: 5px 0 7px; font-family: var(--serif); font-size: 17px; font-weight: 400; }
     .cart-item p { margin: 0; color: var(--muted); font-size: 10px; }
     .cart-item button { align-self: start; border: 0; background: none; cursor: pointer; color: var(--muted); font-size: 18px; }
@@ -1095,7 +1093,7 @@
     }
     dialog::backdrop { background: rgba(32,28,23,.58); backdrop-filter: blur(4px); }
     .quick-view { display: grid; grid-template-columns: 1.1fr .9fr; min-height: 600px; }
-    .quick-view__image { min-height: 550px; background-image: var(--product-image); background-repeat: no-repeat; background-size: auto 205%; }
+    .quick-view__image { min-height: 550px; background-color: var(--paper-2); background-image: var(--product-image); background-repeat: no-repeat; background-position: center; background-size: contain; }
     .quick-view__content { position: relative; display: flex; flex-direction: column; justify-content: center; padding: clamp(38px, 6vw, 76px); }
     .dialog-close { position: absolute; top: 20px; right: 20px; }
     .quick-view h2 { margin: 0 0 10px; font-family: var(--serif); font-size: clamp(38px, 4vw, 58px); font-weight: 400; letter-spacing: -.04em; }
@@ -1235,7 +1233,6 @@
       .leather-chapter { max-width: 68%; }
       .leather-journey__visual { right: -31vw; bottom: 72px; width: 108vw; }
       .product-grid { grid-template-columns: 1fr; gap: 44px; }
-      .product-media { aspect-ratio: 1 / 1.12; }
       .site-footer__top { grid-template-columns: 1fr; }
       .footer-col:last-child { grid-column: auto; }
       .assurance__item { padding-inline: 14px; }
@@ -1586,7 +1583,7 @@
     const state = { filter: 'all', cart: [], quickId: null };
     const productGrid = document.querySelector('#productGrid');
     const productCount = document.querySelector('#productCount');
-    const imageFor = product => `url(assets/catalogo-${product.sheet}.jpg)`;
+    const imageFor = product => `url(assets/catalogo-${product.sheet}-${product.crop}.jpg)`;
     const findProduct = id => products.find(product => product.id === id);
     const formatPrice = value => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value);
 
